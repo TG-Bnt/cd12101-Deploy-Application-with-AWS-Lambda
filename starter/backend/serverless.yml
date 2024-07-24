@@ -4,7 +4,7 @@ service: serverless-todo-app
 
 plugins:
   - serverless-iam-roles-per-function
-  - serverless-request-validator-plugin
+  - serverless-req-validator-plugin
 
 frameworkVersion: '3'
 
