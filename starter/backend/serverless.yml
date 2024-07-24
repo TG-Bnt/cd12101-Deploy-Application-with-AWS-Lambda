@@ -16,6 +16,8 @@ provider:
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
+    TODOS_IMAGES_S3_BUCKET: ${self:service}-${self:provider.stage}-attachments
+    SIGNED_URL_EXPIRATION: 300
 
 functions:
 
@@ -95,6 +97,18 @@ functions:
       - http:
           method: post
           path: todos/{todoId}/attachment
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:* # Allow all actions on S3
+        Resource: "arn:aws:s3:::${self:provider.environment.TODOS_IMAGES_S3_BUCKET}/*"
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:UpdateItem
+          - dynamodb:PutItem
+        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
 
 resources:
   Resources:

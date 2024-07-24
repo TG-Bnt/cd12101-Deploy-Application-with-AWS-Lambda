@@ -1,9 +1,11 @@
-import { v4 as uuidv4 } from 'uuid'
-import { TodoAccess } from '../dataLayer/todoAccess.mjs'
+import { v4 as uuidv4 } from "uuid"
+import { TodoAccess } from "../dataLayer/todoAccess.mjs"
+import { AttachmentUtils } from "../fileStorage/s3AttachmentUtils.mjs"
 
 import { createLogger } from "../utils/logger.mjs"
 
 const todoAccess = new TodoAccess();
+const attachmentUtils = new AttachmentUtils();
 const logger = createLogger("todos")
 
 export async function getTodos(userId) {
@@ -19,7 +21,7 @@ export async function createTodo(userId, newTodo) {
         todoId: id,
         createdAt: new Date().toISOString(),
         done: false,
-        attachementUrl: null,
+        attachementUrl: attachmentUtils.getAttachmentUrl(id),
         ...newTodo
     }
 
@@ -48,4 +50,8 @@ export async function deleteTodo(userId, todoId) {
 
     await todoAccess.deleteTodo(item, userId)
     return item
+}
+
+export async function generatePresignedUrl(todoId) {
+    return await attachmentUtils.getPresignedUrl(todoId)
 }
