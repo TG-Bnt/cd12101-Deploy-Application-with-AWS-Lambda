@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import { TodoAccess } from "../dataLayer/todoAccess.mjs"
-import { AttachmentUtils } from "../fileStorage/s3AttachmentUtils.mjs"
+import { AttachmentUtils } from "../fileStorage/attachmentUtils.mjs"
 
 import { createLogger } from "../utils/logger.mjs"
 
