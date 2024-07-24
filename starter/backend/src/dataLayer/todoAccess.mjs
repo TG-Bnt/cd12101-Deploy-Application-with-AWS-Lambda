@@ -12,6 +12,7 @@ const docClient = new XAWS.DynamoDB.DocumentClient();
 
 export class TodoAccess{
     async getTodos(userId) {
+        logger.info(`Getting todos for user ${userId}`)
         await docClient.query({
             TableName: todosTable,
             IndexName: todosIndex,
@@ -23,6 +24,7 @@ export class TodoAccess{
     }
 
     async createTodo(todo) {
+        logger.info(`Creating todo ${todo.todoId} for user ${todo.userId}`)
         await docClient.put({
             TableName: todosTable,
             Item: todo
@@ -30,6 +32,7 @@ export class TodoAccess{
     }
 
     async updateTodo(userId, todoId, todo) {
+        logger.info(`Updating todo ${todoId} for user ${userId}`)
         await docClient.update({
             TableName: todosTable,
             Key: {
@@ -49,6 +52,7 @@ export class TodoAccess{
     }
 
     async deleteTodo(todoId, userId) {
+        logger.info(`Deleting todo ${todoId} for user ${userId}`)
         await docClient.delete({
             TableName: todosTable,
             Key: {
