@@ -13,6 +13,11 @@ provider:
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
+  tracing:
+    apiGateway: true
+    lambda: true
+  logs:
+    restApi: true
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
@@ -23,6 +28,13 @@ functions:
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler
@@ -41,6 +53,12 @@ functions:
         Action:
           - dynamodb:Query
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.TODOS_CREATED_AT_INDEX}"
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
@@ -58,6 +76,12 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
@@ -75,6 +99,12 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
@@ -89,6 +119,12 @@ functions:
         Action:
           - dynamodb:DeleteItem
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   GenerateUploadUrl:
@@ -109,6 +145,12 @@ functions:
           - dynamodb:UpdateItem
           - dynamodb:PutItem
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
+      - Effect: "Allow"
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
 resources:
   Resources:
