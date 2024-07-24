@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "UpdateTodoRequest",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "dueDate": {
+            "type": "string"
+        },
+        "createdAt": {
+            "type": "string"
+        },
+        "done": {
+            "type": "boolean"
+        },
+        "userId": {
+            "type": "string"
+        },
+        "attachmentUrl": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "name",
+        "dueDate",
+        "createdAt",
+        "done",
+        "userId"
+    ],
+    "additionalProperties": false
+}

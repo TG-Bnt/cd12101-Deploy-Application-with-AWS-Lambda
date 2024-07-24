@@ -1,8 +1,26 @@
+import { getUserId } from "../utils.mjs"
+import { deleteTodo } from "../../businessLogic/todos.mjs"
+import { createLogger } from "../../utils/logger.mjs"
 
-export function handler(event) {
+const logger = createLogger("deleteTodo")
+
+export async function handler(event) {
   const todoId = event.pathParameters.todoId
+  const userId = getUserId(event)
 
-  // TODO: Remove a TODO item by id
-  return undefined
+  logger.info("Deleting todo", { todoId })
+
+  const result = await deleteTodo(userId, todoId)
+
+  return {
+    statusCode: 200,
+    Headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
+    body: JSON.stringify({
+      item: result
+    })
+  }
 }
 
